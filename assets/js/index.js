@@ -1,5 +1,6 @@
 const cardContainer = document.querySelector('div.row.cards')
 const homeOwnerBtn = document.querySelector('button.btn.homeowner')
+const contractorBtn = document.querySelector('button.btn.contractor')
 const form = document.querySelector('form')
 
 fetch('http://localhost:3000/jobs')
@@ -31,22 +32,22 @@ const handleCreateUserAndJob = (username, zipcode, isComplete = false, descripti
 
 const handleCreateJob = (zipcode, isComplete = false, description, user_id) => {
     fetch('http://localhost:3000/jobs', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            zipcode: zipcode,
-            isComplete: isComplete,
-            description: description,
-            user_id: user_id
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                zipcode: zipcode,
+                isComplete: isComplete,
+                description: description,
+                user_id: user_id
+            })
         })
-    })
-    .then(response => response.json())
-    .then(newJobObj => {
-        turnJobIntoCard(newJobObj)
-    })
+        .then(response => response.json())
+        .then(newJobObj => {
+            turnJobIntoCard(newJobObj)
+        })
 }
 
 homeOwnerBtn.addEventListener('click', event => {
@@ -101,7 +102,27 @@ homeOwnerBtn.addEventListener('click', event => {
 
         handleCreateUserAndJob(username, zipcode, isComplete = false, jobDescription)
         form.reset()
-        form.parentNode.innerHTML = ''
+        form.innerHTML = ''
+    })
+})
+
+contractorBtn.addEventListener('click', event => {
+    form.innerHTML = ''
+    let cardFooters = document.querySelectorAll('div.d-flex.card-footer')
+
+    cardFooters.forEach(footer => {
+        let createBidBtn = document.createElement('button')
+        createBidBtn.type = 'click'
+        createBidBtn.innerText = 'create bid'
+        createBidBtn.classList.add('btn', 'create-bid')
+        createBidBtn.style = "background: rgb(120,194,173);"
+        footer.append(createBidBtn)
+
+        createBidBtn.addEventListener('click', event => {
+            footer.innerHTML = ''
+
+        })
+
     })
 })
 
@@ -163,3 +184,4 @@ const turnJobIntoCard = (job) => {
     cardContainer.append(outerCard)
     renderBids(job, outerCard)
 }
+
