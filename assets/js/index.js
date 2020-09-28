@@ -10,9 +10,44 @@ fetch('http://localhost:3000/jobs')
         })
     })
 
-// const handleCreateUser = (username) => {
-//     fetch('')
-// }   
+const handleCreateUserAndJob = (username, zipcode, isComplete = false, description) => {
+    fetch('http://localhost:3000/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username
+            }),
+        })
+        .then(response => response.json())
+        .then(newUserObj => {
+            let user_id;
+            user_id = newUserObj.id
+            handleCreateJob(zipcode, isComplete = false, description, user_id)
+        })
+}
+
+const handleCreateJob = (zipcode, isComplete = false, description, user_id) => {
+    fetch('http://localhost:3000/jobs', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            zipcode: zipcode,
+            isComplete: isComplete,
+            description: description,
+            user_id: user_id
+        })
+    })
+    .then(response => response.json())
+    .then(newJobObj => {
+        turnJobIntoCard(newJobObj)
+    })
+}
 
 homeOwnerBtn.addEventListener('click', event => {
     let formGroupA = document.createElement('div')
@@ -64,10 +99,11 @@ homeOwnerBtn.addEventListener('click', event => {
         let zipcode = event.target.zipcode.value
         let jobDescription = event.target['description-text'].value
 
-
-        
+        handleCreateUserAndJob(username, zipcode, isComplete = false, jobDescription)
+        form.reset()
+        form.parentNode.innerHTML = ''
     })
-})    
+})
 
 const renderBids = (job, parentNode) => {
     let cardBorder = document.createElement('div')
