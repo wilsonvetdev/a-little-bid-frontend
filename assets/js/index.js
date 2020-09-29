@@ -266,16 +266,104 @@ const turnJobIntoCard = (job) => {
                             cardHeader.append(h5)
 
                             let cardBody = document.createElement('div')
-                            cardBody.classList.add('card-body')
+                            cardBody.classList.add('card-body', 'input-parent')
                             cardBorder.append(cardBody)
 
                             let p = document.createElement('p')
+                            p.setAttribute('id', 'update-this')
                             p.innerText = newBidObj.comment
                             cardBody.append(p)
 
-                            cardFooter.innerHTML = ''
+                            let editBidButton = document.createElement('button')
+                            editBidButton.type = 'click'
+                            editBidButton.innerText = 'edit bid'
+                            editBidButton.classList.add('btn', 'submit-bid', 'mt-2')
+                            editBidButton.style = "background: rgb(120,194,173);"
+                            cardBody.append(editBidButton)
 
-                            //add button for edit and delete tomorrow
+                            editBidButton.addEventListener('click', event => {
+                                cardBody.removeChild(editBidButton)
+                                let updateBidForm = document.createElement('form')
+                                let updateBidAmountLabel = document.createElement('label')
+                                updateBidAmountLabel.classList.add('mr-3')
+                                updateBidAmountLabel.setAttribute('for', 'edit-bid-amount')
+                                updateBidAmountLabel.innerText = 'Bid Amount'
+                                let updateBidAmountInput = document.createElement('input')
+                                updateBidAmountInput.id = 'edit-bid-amount'
+                                updateBidAmountInput.classList.add('form-control')
+                                updateBidAmountInput.value = newBidObj.bid_amount
+                                let updatePLabel = document.createElement('label')
+                                updatePLabel.setAttribute('for', 'edit-bid-text')
+                                updatePLabel.innerText = 'Comment'
+                                let updateP = document.querySelector('#update-this')
+                                let editText = document.createElement('textarea')
+                                let saveBidButton = document.createElement('button')
+                                saveBidButton.type = 'click'
+                                saveBidButton.innerText = 'save bid'
+                                saveBidButton.classList.add('btn', 'submit-bid', 'mt-2')
+                                saveBidButton.style = "background: rgb(120,194,173);"
+                                editText.classList.add('form-control')
+                                editText.id = 'edit-bid-text'
+                                editText.type = 'text'
+                                editText.style = 'width: 300px; height: 200px'
+                                editText.value = updateP.innerText
+                                let formGroupEdit = document.createElement('form-group')
+                                formGroupEdit.classList.add('form-group')
+                                formGroupEdit.append(updateBidAmountLabel, updateBidAmountInput, updatePLabel, editText)
+                                updateBidForm.append(formGroupEdit, saveBidButton)
+                                cardBody.append(updateBidForm)
+                                cardBody.removeChild(updateP)
+
+                                updateBidForm.addEventListener('submit', event => {
+                                    event.preventDefault()
+                                    let updateThisBid = newBidObj.id
+                                    let newEditAmount = event.target['edit-bid-amount'].value
+                                    let newComment = event.target['edit-bid-text'].value
+
+                                    fetch('http://localhost:3000/bids', {
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Accept': 'applicaiton/json'
+                                            },
+                                            body: JSON.stringify({
+                                                bid_id: updateThisBid,
+                                                bid_amount: newEditAmount,
+                                                comment: newComment
+                                            })
+                                        })
+                                        .then(response => response.json())
+                                        .then(updatedBidObj => {
+                                            let oldCard = document.querySelector('div.input-parent')
+                                            oldCard.parentNode.innerHTML = ''
+                                            let cardBorder = document.createElement('div')
+                                            cardBorder.classList.add('card', 'border-dark')
+                                            outerCard.append(cardBorder)
+
+                                            let cardHeader = document.createElement('div')
+                                            cardHeader.classList.add('card-header', 'bg-secondary', 'text-light')
+                                            cardHeader.innerText = 'Bid Amount: $' + updatedBidObj.bid_amount
+                                            outerCard.append(cardBorder)
+                                            cardBorder.append(cardHeader)
+
+                                            let h5 = document.createElement('h5')
+                                            h5.innerText = 'From: ' + updatedBidObj.contractor.business_name
+                                            cardHeader.append(h5)
+
+                                            let cardBody = document.createElement('div')
+                                            cardBody.classList.add('card-body', 'input-parent')
+                                            cardBorder.append(cardBody)
+
+                                            let p = document.createElement('p')
+                                            p.setAttribute('id', 'update-this')
+                                            p.innerText = updatedBidObj.comment
+                                            cardBody.append(p)
+
+                                        })
+
+                                })
+
+                            })
                         })
                 })
         })
