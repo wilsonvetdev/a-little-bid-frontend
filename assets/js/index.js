@@ -274,6 +274,8 @@ const turnJobIntoCard = (job) => {
                             cardBody.append(p)
 
                             cardFooter.innerHTML = ''
+
+                            //add button for edit and delete tomorrow
                         })
                 })
         })
