@@ -176,6 +176,17 @@ const turnJobIntoCard = (job) => {
     createBidBtn.style = "background: rgb(120,194,173);"
     cardFooter.append(createBidBtn)
 
+    let deleteJobBtn = document.createElement('button')
+    deleteJobBtn.type = 'click'
+    deleteJobBtn.innerText = 'delete job'
+    deleteJobBtn.classList.add('btn', 'create-bid', 'ml-3')
+    deleteJobBtn.style = "background: rgb(120,194,173);"
+    cardFooter.append(deleteJobBtn)
+
+    // deleteJobBtn.addEventListener('click', event => {
+    //     fetch
+    // })
+
     createBidBtn.addEventListener('click', event => {
         cardFooter.innerHTML = ''
         let bidForm = document.createElement('form')
@@ -281,6 +292,8 @@ const turnJobIntoCard = (job) => {
                             editBidButton.style = "background: rgb(120,194,173);"
                             cardBody.append(editBidButton)
 
+                            cardFooter.innerHTML = ''
+
                             editBidButton.addEventListener('click', event => {
                                 cardBody.removeChild(editBidButton)
                                 let updateBidForm = document.createElement('form')
@@ -358,6 +371,14 @@ const turnJobIntoCard = (job) => {
                                             p.setAttribute('id', 'update-this')
                                             p.innerText = updatedBidObj.comment
                                             cardBody.append(p)
+
+                                            //just for appearance, not too sure how to toggle in between editing and saving
+                                            let editBidButton = document.createElement('button')
+                                            editBidButton.type = 'click'
+                                            editBidButton.innerText = 'edit bid'
+                                            editBidButton.classList.add('btn', 'submit-bid', 'mt-2')
+                                            editBidButton.style = "background: rgb(120,194,173);"
+                                            cardBody.append(editBidButton)
 
                                         })
 
