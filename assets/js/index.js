@@ -1,7 +1,7 @@
 const cardContainer = document.querySelector('div.row.cards')
 const homeOwnerBtn = document.querySelector('button.btn.homeowner')
 const contractorBtn = document.querySelector('button.btn.contractor')
-const form = document.querySelector('form')
+const homeownerForm = document.querySelector('form#homeowner')
 
 fetch('http://localhost:3000/jobs')
     .then(response => response.json())
@@ -26,7 +26,7 @@ const handleCreateUserAndJob = (username, zipcode, isComplete = false, descripti
         .then(newUserObj => {
             let user_id;
             user_id = newUserObj.id
-            handleCreateJob(zipcode, isComplete = false, description, user_id)
+            handleCreateJob(zipcode, isComplete, description, user_id)
         })
 }
 
@@ -79,7 +79,7 @@ homeOwnerBtn.addEventListener('click', event => {
     let descriptionText = document.createElement('textarea')
     descriptionText.setAttribute('id', 'description-text')
     descriptionText.type = 'text'
-    descriptionText.style = 'width: 300px'
+    descriptionText.style = 'width: 300px; height: 200px'
     descriptionText.classList.add('form-control')
 
     let submitBtn = document.createElement('button')
@@ -90,10 +90,10 @@ homeOwnerBtn.addEventListener('click', event => {
     formGroupA.append(usernameLabel, usernameInput)
     formGroupB.append(zipcodeLabel, zipcodeInput)
     formGroupC.append(descriptionLabel, descriptionText)
-    form.innerHTML = ''
-    form.append(formGroupA, formGroupB, formGroupC, submitBtn)
+    homeownerForm.innerHTML = ''
+    homeownerForm.append(formGroupA, formGroupB, formGroupC, submitBtn)
 
-    form.addEventListener('submit', event => {
+    homeownerForm.addEventListener('submit', event => {
         event.preventDefault()
 
         let username = event.target.username.value
@@ -101,30 +101,16 @@ homeOwnerBtn.addEventListener('click', event => {
         let jobDescription = event.target['description-text'].value
 
         handleCreateUserAndJob(username, zipcode, isComplete = false, jobDescription)
-        form.reset()
-        form.innerHTML = ''
+        homeownerForm.reset()
+        homeownerForm.innerHTML = ''
     })
 })
+
 
 contractorBtn.addEventListener('click', event => {
-    form.innerHTML = ''
-    let cardFooters = document.querySelectorAll('div.d-flex.card-footer')
-
-    cardFooters.forEach(footer => {
-        let createBidBtn = document.createElement('button')
-        createBidBtn.type = 'click'
-        createBidBtn.innerText = 'create bid'
-        createBidBtn.classList.add('btn', 'create-bid')
-        createBidBtn.style = "background: rgb(120,194,173);"
-        footer.append(createBidBtn)
-
-        createBidBtn.addEventListener('click', event => {
-            footer.innerHTML = ''
-
-        })
-
-    })
+    homeownerForm.innerHTML = ''
 })
+
 
 const renderBids = (job, parentNode) => {
     let cardBorder = document.createElement('div')
@@ -177,11 +163,122 @@ const turnJobIntoCard = (job) => {
     p.innerText = job.description
     cardBody.append(p)
 
+    cardContainer.append(outerCard)
+
     let cardFooter = document.createElement('div')
     cardFooter.classList.add('d-flex', 'card-footer')
     cardBorder.append(cardFooter)
 
-    cardContainer.append(outerCard)
+    let createBidBtn = document.createElement('button')
+    createBidBtn.type = 'click'
+    createBidBtn.innerText = 'create bid'
+    createBidBtn.classList.add('btn', 'create-bid')
+    createBidBtn.style = "background: rgb(120,194,173);"
+    cardFooter.append(createBidBtn)
+
+    createBidBtn.addEventListener('click', event => {
+        cardFooter.innerHTML = ''
+        let bidForm = document.createElement('form')
+        bidForm.id = 'bid-form'
+        let formGroupA = document.createElement('form-group')
+        formGroupA.classList.add('form-group')
+        let businessNameLabel = document.createElement('label')
+        businessNameLabel.setAttribute('for', 'business-name')
+        businessNameLabel.innerText = 'Business Name'
+        let businessNameInput = document.createElement('input')
+        businessNameInput.setAttribute('id', 'business-name')
+        businessNameInput.type = 'text'
+        businessNameInput.classList.add('form-control')
+        let bidAmountLabel = document.createElement('label')
+        bidAmountLabel.setAttribute('for', 'bid-amount')
+        bidAmountLabel.innerText = 'Bid Amount'
+        let bidAmountInput = document.createElement('input')
+        bidAmountInput.id = 'bid-amount'
+        bidAmountInput.type = 'text'
+        bidAmountInput.classList.add('form-control')
+        let bidTextLabel = document.createElement('label')
+        bidTextLabel.setAttribute('for', 'bid-text')
+        bidTextLabel.innerText = 'Comment'
+        let bidText = document.createElement('textarea')
+        bidText.setAttribute('id', 'bid-text')
+        bidText.type = 'text'
+        bidText.style = 'width: 300px; height: 200px'
+        bidText.classList.add('form-control')
+        let submitBidBtn = document.createElement('button')
+        submitBidBtn.type = 'submit'
+        submitBidBtn.innerText = 'submit bid'
+        submitBidBtn.classList.add('btn', 'submit-bid', 'mt-2')
+        submitBidBtn.style = "background: rgb(120,194,173);"
+
+        formGroupA.append(businessNameLabel, businessNameInput, bidAmountLabel, bidAmountInput, bidTextLabel, bidText)
+        bidForm.append(formGroupA, submitBidBtn)
+        cardFooter.append(bidForm)
+
+        bidForm.addEventListener('submit', event => {
+            event.preventDefault()
+            let newContractor;
+            let businessNameInput = event.target['business-name'].value
+            let newBidAmount = event.target['bid-amount'].value
+            let newBidText = event.target['bid-text'].value
+
+            fetch('http://localhost:3000/contractors', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        business_name: businessNameInput
+                    })
+                })
+                .then(response => response.json())
+                .then(newContractorObj => {
+                    newContractor = newContractorObj
+
+                    fetch('http://localhost:3000/bids', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                job_id: job.id,
+                                contractor_id: newContractor.id,
+                                bid_amount: newBidAmount,
+                                isAccepted: false,
+                                comment: newBidText,
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(newBidObj => {
+                            let cardBorder = document.createElement('div')
+                            cardBorder.classList.add('card', 'border-dark')
+                            outerCard.append(cardBorder)
+
+                            let cardHeader = document.createElement('div')
+                            cardHeader.classList.add('card-header', 'bg-secondary', 'text-light')
+                            cardHeader.innerText = 'Bid Amount: $' + newBidObj.bid_amount
+                            outerCard.append(cardBorder)
+                            cardBorder.append(cardHeader)
+
+                            let h5 = document.createElement('h5')
+                            h5.innerText = 'From: ' + newBidObj.contractor.business_name
+                            cardHeader.append(h5)
+
+                            let cardBody = document.createElement('div')
+                            cardBody.classList.add('card-body')
+                            cardBorder.append(cardBody)
+
+                            let p = document.createElement('p')
+                            p.innerText = newBidObj.comment
+                            cardBody.append(p)
+
+                            cardFooter.innerHTML = ''
+                        })
+                })
+        })
+
+    })
+
     renderBids(job, outerCard)
 }
-
