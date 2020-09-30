@@ -2,6 +2,7 @@ const cardContainer = document.querySelector('div.row.cards')
 const homeOwnerBtn = document.querySelector('button.btn.homeowner')
 const contractorBtn = document.querySelector('button.btn.contractor')
 const homeownerForm = document.querySelector('form#homeowner')
+const jobsBanner = document.querySelector('h1.text-center.mb-4')
 
 fetch('http://localhost:3000/jobs')
     .then(response => response.json())
@@ -183,9 +184,32 @@ const turnJobIntoCard = (job) => {
     deleteJobBtn.style = "background: rgb(120,194,173);"
     cardFooter.append(deleteJobBtn)
 
-    // deleteJobBtn.addEventListener('click', event => {
-    //     fetch
-    // })
+    deleteJobBtn.addEventListener('click', event => {
+        fetch(`http://localhost:3000/jobs/${job.id}`, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(response => {
+            if(response) {
+                let alertDiv = document.createElement('div')
+                alertDiv.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show')
+                alertDiv.setAttribute('role', 'alert')
+                alertDiv.innerText = response.success
+                let dismissBtn = document.createElement('button')
+                dismissBtn.type = 'button'
+                dismissBtn.classList.add('close', 'mt-2')
+                dismissBtn.setAttribute('data-dismiss', 'alert')
+                dismissBtn.setAttribute('aria-label', 'Close')
+                dismissBtn.innerText = 'x'
+                let span = document.createElement('span')
+                span.setAttribute('data-hidden', 'true')
+                span.innerText = '&times;'
+                alertDiv.append(dismissBtn)
+                jobsBanner.append(alertDiv)
+            }
+            outerCard.innerHTML = ''
+        })
+    })
 
     createBidBtn.addEventListener('click', event => {
         cardFooter.innerHTML = ''
@@ -393,3 +417,4 @@ const turnJobIntoCard = (job) => {
 
     renderBids(job, outerCard)
 }
+
