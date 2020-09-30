@@ -48,6 +48,23 @@ const handleCreateJob = (zipcode, isComplete = false, description, user_id) => {
         .then(response => response.json())
         .then(newJobObj => {
             turnJobIntoCard(newJobObj)
+            if(newJobObj) {
+                let alertDiv = document.createElement('div')
+                alertDiv.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show')
+                alertDiv.setAttribute('role', 'alert')
+                alertDiv.innerText = 'New job added successfully!'
+                let dismissBtn = document.createElement('button')
+                dismissBtn.type = 'button'
+                dismissBtn.classList.add('close', 'mt-2')
+                dismissBtn.setAttribute('data-dismiss', 'alert')
+                dismissBtn.setAttribute('aria-label', 'Close')
+                dismissBtn.innerText = 'x'
+                let span = document.createElement('span')
+                span.setAttribute('data-hidden', 'true')
+                span.innerText = '&times;'
+                alertDiv.append(dismissBtn)
+                jobsBanner.append(alertDiv)
+            }
         })
 }
 
