@@ -48,6 +48,23 @@ const handleCreateJob = (zipcode, isComplete = false, description, user_id) => {
         .then(response => response.json())
         .then(newJobObj => {
             turnJobIntoCard(newJobObj)
+            if (newJobObj) {
+                let alertDiv = document.createElement('div')
+                alertDiv.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show')
+                alertDiv.setAttribute('role', 'alert')
+                alertDiv.innerText = 'New job added successfully!'
+                let dismissBtn = document.createElement('button')
+                dismissBtn.type = 'button'
+                dismissBtn.classList.add('close', 'mt-2')
+                dismissBtn.setAttribute('data-dismiss', 'alert')
+                dismissBtn.setAttribute('aria-label', 'Close')
+                dismissBtn.innerText = 'x'
+                let span = document.createElement('span')
+                span.setAttribute('data-hidden', 'true')
+                span.innerText = '&times;'
+                alertDiv.append(dismissBtn)
+                jobsBanner.append(alertDiv)
+            }
         })
 }
 
@@ -166,53 +183,58 @@ const turnJobIntoCard = (job) => {
 
     cardContainer.append(outerCard)
 
-    let cardFooter = document.createElement('div')
-    cardFooter.classList.add('d-flex', 'card-footer')
-    cardBorder.append(cardFooter)
+    let cardFooterA = document.createElement('div')
+    cardFooterA.classList.add('d-flex', 'card-footer')
+    cardBorder.append(cardFooterA)
+
+    let cardFooterB = document.createElement('div')
+    cardFooterB.classList.add('d-flex', 'card-footer')
+    cardBorder.append(cardFooterB)
 
     let createBidBtn = document.createElement('button')
     createBidBtn.type = 'click'
     createBidBtn.innerText = 'create bid'
     createBidBtn.classList.add('btn', 'create-bid')
     createBidBtn.style = "background: rgb(120,194,173);"
-    cardFooter.append(createBidBtn)
+    cardFooterA.append(createBidBtn)
 
     let deleteJobBtn = document.createElement('button')
     deleteJobBtn.type = 'click'
     deleteJobBtn.innerText = 'delete job'
     deleteJobBtn.classList.add('btn', 'create-bid', 'ml-3')
     deleteJobBtn.style = "background: rgb(120,194,173);"
-    cardFooter.append(deleteJobBtn)
+    cardFooterA.append(deleteJobBtn)
 
     deleteJobBtn.addEventListener('click', event => {
         fetch(`http://localhost:3000/jobs/${job.id}`, {
-            method: 'DELETE',
-        })
-        .then(response => response.json())
-        .then(response => {
-            if(response) {
-                let alertDiv = document.createElement('div')
-                alertDiv.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show')
-                alertDiv.setAttribute('role', 'alert')
-                alertDiv.innerText = response.success
-                let dismissBtn = document.createElement('button')
-                dismissBtn.type = 'button'
-                dismissBtn.classList.add('close', 'mt-2')
-                dismissBtn.setAttribute('data-dismiss', 'alert')
-                dismissBtn.setAttribute('aria-label', 'Close')
-                dismissBtn.innerText = 'x'
-                let span = document.createElement('span')
-                span.setAttribute('data-hidden', 'true')
-                span.innerText = '&times;'
-                alertDiv.append(dismissBtn)
-                jobsBanner.append(alertDiv)
-            }
-            outerCard.innerHTML = ''
-        })
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(response => {
+                if (response) {
+                    let alertDiv = document.createElement('div')
+                    alertDiv.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show')
+                    alertDiv.setAttribute('role', 'alert')
+                    alertDiv.innerText = response.success
+                    let dismissBtn = document.createElement('button')
+                    dismissBtn.type = 'button'
+                    dismissBtn.classList.add('close', 'mt-2')
+                    dismissBtn.setAttribute('data-dismiss', 'alert')
+                    dismissBtn.setAttribute('aria-label', 'Close')
+                    dismissBtn.innerText = 'x'
+                    let span = document.createElement('span')
+                    span.setAttribute('data-hidden', 'true')
+                    span.innerText = '&times;'
+                    alertDiv.append(dismissBtn)
+                    jobsBanner.append(alertDiv)
+                }
+                outerCard.innerHTML = ''
+                outerCard.remove()
+            })
     })
 
     createBidBtn.addEventListener('click', event => {
-        cardFooter.innerHTML = ''
+        // cardFooter.innerHTML = ''
         let bidForm = document.createElement('form')
         bidForm.id = 'bid-form'
         let formGroupA = document.createElement('form-group')
@@ -247,7 +269,7 @@ const turnJobIntoCard = (job) => {
 
         formGroupA.append(businessNameLabel, businessNameInput, bidAmountLabel, bidAmountInput, bidTextLabel, bidText)
         bidForm.append(formGroupA, submitBidBtn)
-        cardFooter.append(bidForm)
+        cardFooterB.append(bidForm)
 
         bidForm.addEventListener('submit', event => {
             event.preventDefault()
@@ -286,6 +308,7 @@ const turnJobIntoCard = (job) => {
                         })
                         .then(response => response.json())
                         .then(newBidObj => {
+
                             let cardBorder = document.createElement('div')
                             cardBorder.classList.add('card', 'border-dark')
                             outerCard.append(cardBorder)
@@ -316,10 +339,11 @@ const turnJobIntoCard = (job) => {
                             editBidButton.style = "background: rgb(120,194,173);"
                             cardBody.append(editBidButton)
 
-                            cardFooter.innerHTML = ''
+                            formGroupA.remove()
+                            bidForm.remove()
 
                             editBidButton.addEventListener('click', event => {
-                                cardBody.removeChild(editBidButton)
+                                // cardBody.removeChild(editBidButton)
                                 let updateBidForm = document.createElement('form')
                                 let updateBidAmountLabel = document.createElement('label')
                                 updateBidAmountLabel.classList.add('mr-3')
@@ -350,6 +374,7 @@ const turnJobIntoCard = (job) => {
                                 updateBidForm.append(formGroupEdit, saveBidButton)
                                 cardBody.append(updateBidForm)
                                 cardBody.removeChild(updateP)
+                                editBidButton.style.display = 'none'
 
                                 updateBidForm.addEventListener('submit', event => {
                                     event.preventDefault()
@@ -396,12 +421,7 @@ const turnJobIntoCard = (job) => {
                                             p.innerText = updatedBidObj.comment
                                             cardBody.append(p)
 
-                                            //just for appearance, not too sure how to toggle in between editing and saving
-                                            let editBidButton = document.createElement('button')
-                                            editBidButton.type = 'click'
-                                            editBidButton.innerText = 'edit bid'
-                                            editBidButton.classList.add('btn', 'submit-bid', 'mt-2')
-                                            editBidButton.style = "background: rgb(120,194,173);"
+                                            editBidButton.style.display = ''
                                             cardBody.append(editBidButton)
 
                                         })
