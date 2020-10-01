@@ -21,7 +21,7 @@ This web app employs the following technologies(not inclusive):
 1. clone this repo to your local environment -- git clone < git repository >
 2. cd(change directory) into the repo
 3. cd into the frontend repo and type 'open index.html' into your command line
-<em> NOTE: This requires a few more steps. Please read below. <em>
+<em> NOTE: This requires a few more steps. Please read below. </em>
 4. visit https://github.com/wilsonvetdev/a-little-bid-api
 5. clone the frontend repo to your local environment -- git clone < git repository >
 6. $ bundle install - installs gems and dependencies
