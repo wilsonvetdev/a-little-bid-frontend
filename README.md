@@ -20,16 +20,18 @@ This web app employs the following technologies(not inclusive):
 # Set-Up
 1. clone this repo to your local environment -- git clone < git repository >
 2. cd(change directory) into the repo
-3. $ bundle install - installs gems and dependencies
-4. $ rails db:migrate - creates the tables for the database
-5. $ rails db:seed - seed the data necessary
-6. rails s to start the server
-7. visit https://github.com/wilsonvetdev/a-little-bid-frontend
-8. clone the frontend repo to your local environment -- git clone < git repository >
-9. cd into the frontend repo and type 'open index.html' into your command line to explore the app
+3. cd into the frontend repo and type 'open index.html' into your command line
+<em> NOTE: This requires a few more steps. Please read below. <em>
+4. visit https://github.com/wilsonvetdev/a-little-bid-api
+5. clone the frontend repo to your local environment -- git clone < git repository >
+6. $ bundle install - installs gems and dependencies
+7. $ rails db:migrate - creates the tables for the database
+8. $ rails db:seed - seed the data necessary
+9. rails s to start the server
+10. With the server running as a result from Step 9, the application should be working in the browser now.
 
 # What's Next?
-Database schema will need to be updated with more tables to add more features. Frontend will also be greatly improved, and will be revisited in the future after the end of the Web Dev Fellowship at Flatiron. Javascript code needs refactoring and make more modular.
+Database schema will need to be updated with more tables to add more features. Frontend will also be greatly improved, and will be revisited in the future after the end of the Web Dev Fellowship at Flatiron. Javascript code needs refactoring and make more modular. I actually might rewrite all the code from scratch and use React instead. I really want to deploy this after I'm finished with Flatiron Fellowship.
 
 # Nice to have features(not final):
 
