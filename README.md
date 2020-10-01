@@ -1,5 +1,5 @@
 # A-Little-Bid
-The app is inteded to allow a user to post job information and allows contractors to submit bid-related information to home constructions. * Not deployed *
+The single-page app is inteded to allow a user to post job information and allows contractors to submit bid-related information to home constructions.  * Not deployed *
 
 # General Info
 A-Little-Bid is a Flatiron School Web Developement Module 3 project to demonstrate working knowledge of drawing an ERD(entity relational database), Active Records Associations, Create, Read, Update and Delete (CRUD) methods, a developer's knowledge of Ruby on Rails, and heavy focus into Vanilla Javascript for interactions between user and browser.
