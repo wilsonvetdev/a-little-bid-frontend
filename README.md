@@ -39,3 +39,8 @@ Database schema will need to be updated with more tables to add more features. F
 # Known Issues so far:
 * Bid editing can only be edited once after submitting.
 * Submitting multiple bids on the same job post is buggy(it seems to trigger a full-page refresh).
+
+# Sample Images(video walk-through coming soon):
+![project sample image](https://github.com/wilsonvetdev/a-little-bid-api/blob/master/app/images/Screen%20Shot%202020-10-01%20at%204.01.58%20PM.png)
+![project sample image](https://github.com/wilsonvetdev/a-little-bid-api/blob/master/app/images/Screen%20Shot%202020-10-01%20at%204.02.45%20PM.png)
+![project sample image](https://github.com/wilsonvetdev/a-little-bid-api/blob/master/app/images/Screen%20Shot%202020-10-01%20at%204.14.43%20PM.png)
