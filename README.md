@@ -21,7 +21,7 @@ This web app employs the following technologies(not inclusive):
 1. clone this repo to your local environment -- git clone < git repository >
 2. cd(change directory) into the repo
 3. cd into the frontend repo and type 'open index.html' into your command line
-<em> NOTE: This requires a few more steps. Please read below. </em>
+* **NOTE: This requires a few more steps. Please read below.**
 4. visit https://github.com/wilsonvetdev/a-little-bid-api
 5. clone the frontend repo to your local environment -- git clone < git repository >
 6. $ bundle install - installs gems and dependencies
@@ -45,4 +45,6 @@ Database schema will need to be updated with more tables to add more features. F
 # Sample Images(video walk-through coming soon):
 ![project sample image](https://github.com/wilsonvetdev/a-little-bid-api/blob/master/app/images/Screen%20Shot%202020-10-01%20at%204.01.58%20PM.png)
 ![project sample image](https://github.com/wilsonvetdev/a-little-bid-api/blob/master/app/images/Screen%20Shot%202020-10-01%20at%204.02.45%20PM.png)
+
+**The form for a home owner to add a new job post.**
 ![project sample image](https://github.com/wilsonvetdev/a-little-bid-api/blob/master/app/images/Screen%20Shot%202020-10-01%20at%204.14.43%20PM.png)
