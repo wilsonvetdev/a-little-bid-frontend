@@ -23,7 +23,7 @@ This web app employs the following technologies(not inclusive):
 3. cd into the frontend repo and type 'open index.html' into your command line
 * **NOTE: This requires a few more steps. Please read below.**
 4. visit https://github.com/wilsonvetdev/a-little-bid-api
-5. clone the frontend repo to your local environment -- git clone < git repository >
+5. clone the backend/api repo to your local environment -- git clone < git repository >
 6. $ bundle install - installs gems and dependencies
 7. $ rails db:migrate - creates the tables for the database
 8. $ rails db:seed - seed the data necessary
